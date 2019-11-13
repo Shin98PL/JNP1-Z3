@@ -9,6 +9,7 @@ class Fibo
 {
     private:
         vector<bool> v;
+        void norm();
     protected:
         vector<bool> value();
     public:
@@ -40,7 +41,6 @@ class Fibo
         bool  operator!=(const Fibo &rhs);
         bool  operator<(const Fibo &rhs);
         bool  operator>(const Fibo &rhs);
-        bool  operator==(const Fibo &rhs);
         bool  operator<=(const Fibo &rhs);
         bool  operator>=(const Fibo &rhs);
 
