@@ -69,6 +69,41 @@ Fibo::Fibo(string &val)
     this.norm();
 }
 
+Fibo::Fibo(int n)
+{
+    this.v= new vector<bool>();
+    // Kolejne dwie liczby fibonacciego
+    int f1=0;
+    int f2=1;
+    // Pusty vector jak zero
+    if(n>0)
+    {
+        // Liczba zawiera co najmniej jeden bit zapalony
+        this.v.push_back(false);
+        //Szukamy najwiekszej liczby fibonacciego niewiekszej od n
+        while(n-f2>f1)
+        {
+            this.v.push_back(false);
+            swap(f1,f2);
+            if(f1!=1)f2+=f1;
+            else f2=2;
+        }
+        // Podzial liczby n na liczby fibonacciego
+        for(int i=this.v.size()-1;i>=0;--i)
+        {
+            if(n>f2)
+            {
+                this.v[i]=true;
+                n-=f2;
+            }
+            f2-=f1;
+            swap(f1,f2);
+        }
+        // Normalizacja
+        this.norm();
+    }
+}
+
 Fibo::Fibo(Fibo F)
 {
     this.v = new vector<bool>(F.const_v());
@@ -166,6 +201,11 @@ Fibo & Fibo::operator&=(const Fibo &rhs)
     return this;
 }
 
+Fibo & operator&(const Fibo &rhs)
+{
+    return Fibo(this)&=rhs;
+}
+
 Fibo & Fibo::operator|=(const Fibo &rhs)
 {
     vector<bool> v = rhs.value();
@@ -175,6 +215,11 @@ Fibo & Fibo::operator|=(const Fibo &rhs)
     return this;
 }
 
+Fibo & operator|(const Fibo &rhs)
+{
+    return Fibo(this)|=rhs;
+}
+
 Fibo & Fibo::operator^=(const Fibo &rhs)
 {
     vector<bool> v=rhs.value();
@@ -182,6 +227,27 @@ Fibo & Fibo::operator^=(const Fibo &rhs)
     for (int i = 0; i < v.size(); i++) this.v[i] ^= v[i];
     this.norm();
     return this;
+}
+
+Fibo & operator^(const Fibo &rhs)
+{
+    return Fibo(this)^=rhs;
+}
+
+Fibo & operator<<=(const int n)
+{
+    for(int i=0;i<n;++i)this.v.push_back(false);
+    for(int i=this.length()-n-1;i>=0;--i)
+    {
+        this.v[i+n]=this.v[i];
+        this.v[i]=false;
+    }
+    return this;
+}
+
+Fibo & operator<<(const Fibo &rhs)
+{
+    return Fibo(this)<<=rhs;
 }
 
 bool  Fibo::operator==(const Fibo &rhs)
@@ -245,5 +311,3 @@ const & Fibo One(){
     static const Fibo* val1 = new Fibo(1);
     return *val1;
 }
-
-
