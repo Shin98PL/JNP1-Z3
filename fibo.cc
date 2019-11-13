@@ -34,6 +34,21 @@ void Fibo::norm()
     this.v.erase(++largestDigit, this.v.end());
 }
 
+const vector<bool> & value()
+{
+    return this.v;
+}
+
+string & Fibo::to_string()
+{
+    string tmp(this.length(), '0');
+    for (size_t i = 0; i < tmp.size(); ++i)
+    {
+        if (this.v[i] == true) tmp[i] = '1';
+    }
+    return tmp;
+}
+
 Fibo::Fibo()
 {
     this.v = new vector<bool>();
@@ -54,24 +69,14 @@ Fibo::Fibo(string &val)
     this.norm();
 }
 
-const & Fibo Zero(){
-    static const Fibo* val0 = new Fibo();
-    return *val0;
-}
-
-const & Fibo One(){
-    static const Fibo* val1 = new Fibo(1);
-    return *val1;
-}
-
 Fibo::Fibo(Fibo F)
 {
-    this.v = new vector<bool>(F.value());
+    this.v = new vector<bool>(F.const_v());
 }
 
 Fibo & Fibo::operator=(const Fibo &rhs)
 {
-    this.v = F.value();
+    if (this != rhs) this.v = rhs.const_v();
     return this;
 }
 
@@ -79,16 +84,16 @@ Fibo & Fibo::operator+=(const Fibo &rhs)
 {
     // 5 by zachować bezpieczny margines z false dla norm() po dodaniu
     for (int i = 0; i < 5; ++i) this.v.push_back(false);
-    const vector<bool> rhs_val = rhs.const_v();
+    const vector<bool> rhs_v = rhs.const_v();
 
     // Dodajemy od najmniej znaczących fibitów do najbardziej znaczących
-    for (size_t i = 0; i < this.v.size() && i < rhs.length(); ++i)
+    for (size_t i = 0; i < this.v.size() && i < rhs_v.size(); ++i)
     {
 
-        if (this.v[i] == false || rhs_val[i] == false)
+        if (this.v[i] == false || rhs_v[i] == false)
         // Jeżeli nie ma "podwójnego fibitu" wstawiamy większy z dwóch
         {
-            this.v[i] = (this.v[i] || rhs_val[i]);
+            this.v[i] = (this.v[i] || rhs_v[i]);
         }
         else
         // Gdy jest "podwójny fibit" :
@@ -220,7 +225,25 @@ bool  operator>=(const Fibo &rhs)
     return !(this < rhs);
 }
 
+friend ostream& operator<<(ostream& os, const Fibo& f1)
+{
+    os << f1.to_string();
+    return os;
+}
+
 size_t Fibo::length()
 {
     return this.v.size();
 }
+
+const & Fibo Zero(){
+    static const Fibo* val0 = new Fibo();
+    return *val0;
+}
+
+const & Fibo One(){
+    static const Fibo* val1 = new Fibo(1);
+    return *val1;
+}
+
+
