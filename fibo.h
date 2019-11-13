@@ -8,14 +8,16 @@
 class Fibo
 {
     private:
-        vector<bool> v;
+        std::vector<bool> v;
         void norm();
     protected:
-        vector<bool> value();
+        std::vector<bool> & value();
+        std::string & to_string();
+        const std::vector<bool> & const_v();
     public:
         // Konstruktory
         Fibo();
-        Fibo(string S);
+        Fibo(std::string &val);
         Fibo(int n);
         Fibo(Fibo F);
 
@@ -55,4 +57,3 @@ const Fibo Zero();
 const Fibo One();
 
 #endif // FIBO_H
-
