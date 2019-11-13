@@ -6,16 +6,26 @@ void Fibo::norm()
 {
     if (v.size() == 0) return;
 
+
     for (unsigned i = this.v.size() - 1; i > 0; --i)
+    // Pozbywamy się par postaci sąsiednich "aktywnych" fibitów od najbardziej
+    // znaczących do najmniej.
     {
         for (unsigned j = i; this.v[j] == true && this.v[j - 1] == true; j += 2)
+        // Jeżeli para fibitów this.v[j] i this.v[j - 1] tworzą ciąg "aktywnych"
+        // fibitów zamieniamy je wzorem F(n) + F(n - 1) = F(n + 1). Zauważmy,
+        // że nie mogłoby w takiej sytuacji zajść this.v[j + 1] == true, bo
+        // albo w pierwszej pętli zostałoby to rozpatrzone wcześniej, dla
+        // i o jeden większego, lub w kolejnych pętlach napis musiałby nie być
+        // unormowany na pozycjach większych od aktualnego j.
         {
-            v[j] = false;
-            v[j - 1] = false;
-            v[j + 1] = true;
+            this.v[j] = false;
+            this.v[j - 1] = false;
+            this.v[j + 1] = true;
         }
     }
 
+    // Usuwanie nadmiarowych zer na początku.
     auto largestDigit = this.v.begin();
     for (auto iter = this.v.begin(); iter != this.v.end(); ++iter)
     {
@@ -72,7 +82,7 @@ Fibo & Fibo::operator+=(const Fibo &rhs)
     const vector<bool> rhs_val = rhs.const_v();
 
     // Dodajemy od najmniej znaczących fibitów do najbardziej znaczących
-    for (size_t i = 0; i < this.v.size(); ++i)
+    for (size_t i = 0; i < this.v.size() && i < rhs.length(); ++i)
     {
 
         if (this.v[i] == false || rhs_val[i] == false)
