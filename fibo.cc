@@ -38,6 +38,7 @@ Fibo::Fibo(string &val)
     while (i > 0)
     {
         if (val[i - 1] == '1') this.v[i - 1] = true;
+        --i;
     }
 
     this.norm();
@@ -62,6 +63,81 @@ Fibo & Fibo::operator=(const Fibo &rhs)
 {
     this.v = F.value();
     return this;
+}
+
+Fibo & Fibo::operator+=(const Fibo &rhs)
+{
+    // 5 by zachować bezpieczny margines z false dla norm() po dodaniu
+    for (int i = 0; i < 5; ++i) this.v.push_back(false);
+    const vector<bool> rhs_val = rhs.const_v();
+
+    // Dodajemy od najmniej znaczących fibitów do najbardziej znaczących
+    for (size_t i = 0; i < this.v.size(); ++i)
+    {
+
+        if (this.v[i] == false || rhs_val[i] == false)
+        // Jeżeli nie ma "podwójnego fibitu" wstawiamy większy z dwóch
+        {
+            this.v[i] = (this.v[i] || rhs_val[i]);
+        }
+        else
+        // Gdy jest "podwójny fibit" :
+        {
+            for (size_t j = i; j != this.v.size();)
+            // Pętlimy się po obliczonych wartościach w tył aż do momentu, gdy
+            // nie będziemy mieli sytuacji "podwójnego fibitu". j wskazuje
+            // pozycję w której musimy dodać fibit do obliczonej sumy.
+            {
+                if (this.v[j] == false)
+                // Jeżeli musimy dodać fibit tam gdzie go nie ma, sprawa jest
+                // prosta i pętla się kończy
+                {
+                    this.v[j] = true;
+                    j = this.v.size();
+                }
+                else if (this.v[j + 1] == true)
+                // Jeżeli znaleźliśmy się w sytuacji, gdzie fibit o pozycji
+                // j + 1 jest obecny, możemy je zamienić na fibit o pozycji
+                // j + 2. Zauważmy, że gdy pętla się rozpoczyna, z unormowania
+                // this.v i wiedzy, że this.v[i] = true wynika, że powyższa
+                // sytuacja nie zachodzi. Dla każdego następnego obrotu musiała
+                // zajść chwilę wcześniej sytuacja this.v[j] == true,
+                // this.v[j + 1] == false i j > 2, więc po wykonaniu
+                // this.v[j] = false, this.v[j + 1] = true, j -= 2
+                // mamy pewność, że this.v[j] == 0 (tj. nie mamy ponownej
+                // sytuacji "podwójnego fibitu").
+                {
+                    this.v[j + 1] = false;
+                    this.v[j + 2] = true;
+                    j = this.v.size();
+                }
+                else
+                // W przeciwnym przypadku możemy zastosować wzór
+                // 2F(n) = F(n + 1) + F(n - 2), przy uwzględnieniu przypadków
+                // skrajnych.
+                {
+                    this.v[j] = false;
+                    this.v[j + 1] = true;
+                    if (j >= 2) j -= 2;
+                    else
+                    {
+                        // Dla j == 0 wzór 2F(n) = F(n + 1) + F(n - 2) ma
+                        // postać 2F(2) = F(3), a dla j == 1 mamy wzory
+                        // 2F(3) = F(4) + F(2) oraz
+                        // F(2) + 2F(3) = F(4) + F(3)
+                        if (j == 1)
+                        {
+                            this.v[1] = this.v[0];
+                            this.v[0] = ~this.v[0];
+                        }
+                        j = this.v.size();
+                    }
+                }
+
+            }
+        }
+    }
+    this.norm();
 }
 
 Fibo & Fibo::operator&=(const Fibo &rhs)
@@ -91,11 +167,6 @@ Fibo & Fibo::operator^=(const Fibo &rhs)
     for (int i = 0; i < v.size(); i++) this.v[i] ^= v[i];
     this.norm();
     return this;
-}
-
-size_t Fibo::length()
-{
-    return this.v.size();
 }
 
 bool  Fibo::operator==(const Fibo &rhs)
@@ -137,4 +208,9 @@ bool  operator>(const Fibo &rhs)
 bool  operator>=(const Fibo &rhs)
 {
     return !(this < rhs);
+}
+
+size_t Fibo::length()
+{
+    return this.v.size();
 }
