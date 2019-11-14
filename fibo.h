@@ -11,18 +11,16 @@ class Fibo
         std::vector<bool> v;
         void norm();
     protected:
-        std::vector<bool> & value();
-        std::string & to_string();
-        const std::vector<bool> & const_v();
+        const std::vector<bool> & value() const;
     public:
         // Konstruktory
         Fibo();
-        Fibo(std::string &val);
+        Fibo(const std::string &S);
         Fibo(int n);
-        Fibo(Fibo F);
+        Fibo(const Fibo &F);
 
         //Destruktor
-        ~Fibo();
+        //~Fibo();
 
         //Operatory
         Fibo & operator=(const Fibo &rhs);
@@ -32,28 +30,29 @@ class Fibo
         Fibo & operator^=(const Fibo &rhs);
         Fibo & operator<<=(const int n);
 
-        Fibo & operator+(const Fibo &rhs);
-        Fibo & operator&(const Fibo &rhs);
-        Fibo & operator|(const Fibo &rhs);
-        Fibo & operator^(const Fibo &rhs);
-        Fibo & operator<<(const int n);
+        Fibo & operator+(const Fibo &rhs) const;
+        Fibo & operator&(const Fibo &rhs) const;
+        Fibo & operator|(const Fibo &rhs) const;
+        Fibo & operator^(const Fibo &rhs) const;
+        Fibo & operator<<(const int n) const;
 
         // Porownania
-        bool  operator==(const Fibo &rhs);
-        bool  operator!=(const Fibo &rhs);
-        bool  operator<(const Fibo &rhs);
-        bool  operator>(const Fibo &rhs);
-        bool  operator<=(const Fibo &rhs);
-        bool  operator>=(const Fibo &rhs);
+        bool  operator==(const Fibo &rhs) const;
+        bool  operator!=(const Fibo &rhs) const;
+        bool  operator<(const Fibo &rhs) const;
+        bool  operator>(const Fibo &rhs) const;
+        bool  operator<=(const Fibo &rhs) const;
+        bool  operator>=(const Fibo &rhs) const;
 
         // Strumien
-        friend ostream& operator<<(ostream& os, const Fibo& f1);
+        friend std::ostream& operator<<(std::ostream& os, const Fibo& f1);
 
         //Dlugosc
-        size_t length();
+        size_t length() const;
 };
 
-const Fibo Zero();
-const Fibo One();
+const Fibo& Zero();
+const Fibo& One();
 
 #endif // FIBO_H
+
