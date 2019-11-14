@@ -188,6 +188,7 @@ const Fibo Fibo::operator+(const Fibo &rhs) const
 Fibo & Fibo::operator&=(const Fibo &rhs)
 {
     vector<bool> val = rhs.value();
+    for (size_t i = this->v.size(); i < val.size(); ++i) this->v.push_back(false);
     for (size_t i = 0; i < this->v.size(); i++)
     {
         if (val.size() <= i) this->v[i] = false;
@@ -205,6 +206,7 @@ const Fibo Fibo::operator&(const Fibo &rhs) const
 Fibo & Fibo::operator|=(const Fibo &rhs)
 {
     vector<bool> val = rhs.value();
+    for (size_t i = this->v.size(); i < val.size(); ++i) this->v.push_back(false);
     while (this->v.size() < val.size()) this->v.push_back(false);
     for (size_t i = 0; i < val.size(); i++) this->v[i] = this->v[i]|val[i];
     this->norm();
@@ -219,6 +221,7 @@ const Fibo Fibo::operator|(const Fibo &rhs)  const
 Fibo & Fibo::operator^=(const Fibo &rhs)
 {
     vector<bool> val=rhs.value();
+    for (size_t i = this->v.size(); i < val.size(); ++i) this->v.push_back(false);
     while(this->v.size() < val.size()) this->v.push_back(false);
     for (size_t i = 0; i < val.size(); i++) this->v[i] = this->v[i]^val[i];
     this->norm();
