@@ -104,8 +104,10 @@ Fibo & Fibo::operator=(const Fibo &rhs)
 
 Fibo & Fibo::operator+=(const Fibo &rhs)
 {
-    // 5 by zachować bezpieczny margines z false przy dodawaniu.
-    for (int i = 0; i < 5; ++i) this->v.push_back(false);
+    // Bezpieczny margines z false przy dodawaniu.
+    size_t overtake = 0;
+    if (rhs.length() > this->length()) overtake = rhs.length() - this->length();
+    for (size_t i = 0; i < overtake + 5; ++i) this->v.push_back(false);
     const vector<bool> rhs_v = rhs.value();
 
     // Dodajemy od najmniej znaczących fibitów do najbardziej znaczących.
@@ -141,7 +143,7 @@ Fibo & Fibo::operator+=(const Fibo &rhs)
                 // zajść chwilę wcześniej sytuacja this.v[j] == true,
                 // this.v[j + 1] == false i j > 2, więc po wykonaniu
                 // this.v[j] = false, this.v[j + 1] = true, j -= 2
-                // mamy pewność, że this.v[j] == 0 (tj. nie mamy ponownej
+                // mamy pewność, że this.v[j + 2] == 0 (tj. nie mamy ponownej
                 // sytuacji "podwójnego fibitu").
                 {
                     this->v[j + 1] = false;
