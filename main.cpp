@@ -37,15 +37,20 @@ int main() {
 
     unsigned seed {static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count())};
     std::default_random_engine rng(seed);
-    for (int i = 0; i < 100; ++i)
+    int counter = 0;
+
+    for (int i = 0; i < 10000; ++i)
     {
         unsigned long l = rng();
         unsigned long k = rng();
         if (Fibo(l + k) != Fibo(l) + Fibo(k))
         {
-        std::cout << "l : " << l << " k : " << k << " l + k " << l + k << '\n';
-        std::cout << Fibo(l + k) << std::endl;
-        std::cout << Fibo(l) + Fibo(k) << std::endl;
+            std::cout << "l : " << l << " k : " << k << " l + k " << l + k << '\n';
+            std::cout << (Fibo(l + k) ^ (Fibo(l) + Fibo(k))) << std::endl;
+            std::cout << Fibo(l + k) << std::endl;
+            std::cout << Fibo(l) + Fibo(k - 1) << std::endl;
+            ++counter;
         }
     }
+    std::cout << counter << std::endl;
 }
