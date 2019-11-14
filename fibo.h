@@ -8,7 +8,7 @@
 class Fibo
 {
     private:
-        std::vector<bool> v;
+        std::vector<bool> v{};
         void norm();
     protected:
         const std::vector<bool> & value() const;

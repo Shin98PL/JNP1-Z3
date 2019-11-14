@@ -49,17 +49,11 @@ Fibo::Fibo()
 
 Fibo::Fibo(const string &val)
 {
-    unsigned i = val.size();
-    while(val[i - 1] != '1' && i > 0) --i;
-
-    this->v = vector<bool>(i + 2, false);
-    while (i > 0)
-    {
-        if (val[i - 1] == '1') this->v[i - 1] = true;
-        --i;
-    }
-
+    this->v = vector<bool>(val.size(), false);
+    for(size_t i=0; i<val.size();++i)if(val[val.size()-i-1]=='1')v[i]=true;
     this->norm();
+    /*for(int i=this->v.size()-1;i>=0;i--)cout<<this->v[i];
+    cout<<" "<<val<<endl; */
 }
 
 Fibo::Fibo(int n)
@@ -82,11 +76,11 @@ Fibo::Fibo(int n)
             else f2=2;
         }
         // Podzial liczby n na liczby fibonacciego.
-        for(int i=this->v.size()-1;i>=0;--i)
+        for(size_t i=this->v.size();i>0;--i)
         {
             if(n>=f2)
             {
-                this->v[i]=true;
+                this->v[i-1]=true;
                 n-=f2;
             }
             f2-=f1;
@@ -237,10 +231,10 @@ Fibo & Fibo::operator^(const Fibo &rhs)  const
 Fibo & Fibo::operator<<=(const int n)
 {
     for(int i=0;i<n;++i)this->v.push_back(false);
-    for(int i=this->length()-n-1;i>=0;--i)
+    for(size_t i=this->length()-n;i>0;--i)
     {
-        this->v[i+n]=this->v[i];
-        this->v[i]=false;
+        this->v[i+n-1]=this->v[i-1];
+        this->v[i-1]=false;
     }
     return *this;
 }
@@ -268,10 +262,10 @@ bool  Fibo::operator<(const Fibo &rhs) const
     vector<bool> v = rhs.value();
     if (this->length() < v.size()) return true;
     if (this->length() > v.size()) return false;
-    for (int i = v.size() - 1; i >= 0; --i)
+    for (size_t i = v.size(); i > 0; --i)
     {
-        if (this->v[i] < v[i]) return true;
-        if (this->v[i] > v[i]) return false;
+        if (this->v[i-1] < v[i-1]) return true;
+        if (this->v[i-1] > v[i-1]) return false;
     }
     return false;
 }
@@ -295,9 +289,9 @@ ostream& operator<<(ostream& os, const Fibo& f1)
 {
     string tmp;
     if(f1.length()==0)tmp="0";
-    for (size_t i = 0; i < tmp.size(); ++i)
+    for (size_t i = f1.length(); i > 0; --i)
     {
-        if (f1.v[i] == true) tmp.push_back('1');
+        if (f1.v[i-1] == true) tmp.push_back('1');
         else tmp.push_back('0');
     }
     os << tmp;
