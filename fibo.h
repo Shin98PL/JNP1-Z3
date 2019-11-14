@@ -30,11 +30,11 @@ class Fibo
         Fibo & operator^=(const Fibo &rhs);
         Fibo & operator<<=(const int n);
 
-        Fibo & operator+(const Fibo &rhs) const;
-        Fibo & operator&(const Fibo &rhs) const;
-        Fibo & operator|(const Fibo &rhs) const;
-        Fibo & operator^(const Fibo &rhs) const;
-        Fibo & operator<<(const int n) const;
+        const Fibo operator+(const Fibo &rhs) const;
+        const Fibo operator&(const Fibo &rhs) const;
+        const Fibo operator|(const Fibo &rhs) const;
+        const Fibo operator^(const Fibo &rhs) const;
+        const Fibo operator<<(const int n) const;
 
         // Porownania
         bool  operator==(const Fibo &rhs) const;
@@ -55,4 +55,3 @@ const Fibo& Zero();
 const Fibo& One();
 
 #endif // FIBO_H
-

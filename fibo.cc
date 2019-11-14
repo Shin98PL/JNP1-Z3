@@ -178,7 +178,7 @@ Fibo & Fibo::operator+=(const Fibo &rhs)
     return *this;
 }
 
-Fibo & Fibo::operator+(const Fibo &rhs) const
+const Fibo Fibo::operator+(const Fibo &rhs) const
 {
     return Fibo(*this)+=rhs;
 }
@@ -195,7 +195,7 @@ Fibo & Fibo::operator&=(const Fibo &rhs)
     return *this;
 }
 
-Fibo & Fibo::operator&(const Fibo &rhs) const
+const Fibo Fibo::operator&(const Fibo &rhs) const
 {
     return Fibo(*this)&=rhs;
 }
@@ -209,7 +209,7 @@ Fibo & Fibo::operator|=(const Fibo &rhs)
     return *this;
 }
 
-Fibo & Fibo::operator|(const Fibo &rhs)  const
+const Fibo Fibo::operator|(const Fibo &rhs)  const
 {
     return Fibo(*this)|=rhs;
 }
@@ -223,7 +223,7 @@ Fibo & Fibo::operator^=(const Fibo &rhs)
     return *this;
 }
 
-Fibo & Fibo::operator^(const Fibo &rhs)  const
+const Fibo Fibo::operator^(const Fibo &rhs)  const
 {
     return Fibo(*this)^=rhs;
 }
@@ -231,15 +231,15 @@ Fibo & Fibo::operator^(const Fibo &rhs)  const
 Fibo & Fibo::operator<<=(const int n)
 {
     for(int i=0;i<n;++i)this->v.push_back(false);
-    for(size_t i=this->length()-n;i>0;--i)
+    for(size_t i=this->length()-static_cast<unsigned>(n);i>0;--i)
     {
-        this->v[i+n-1]=this->v[i-1];
+        this->v[i+static_cast<unsigned>(n)-1]=this->v[i-1];
         this->v[i-1]=false;
     }
     return *this;
 }
 
-Fibo & Fibo::operator<<(const int n) const
+const Fibo Fibo::operator<<(const int n) const
 {
     return Fibo(*this)<<=n;
 }
