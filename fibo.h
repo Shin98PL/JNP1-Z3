@@ -16,7 +16,7 @@ class Fibo
         // Konstruktory
         Fibo();
         Fibo(const std::string &S);
-        Fibo(unsigned long n);
+        Fibo(unsigned long long n);
         Fibo(const Fibo &F);
 
         //Destruktor
@@ -55,3 +55,4 @@ const Fibo& Zero();
 const Fibo& One();
 
 #endif // FIBO_H
+
