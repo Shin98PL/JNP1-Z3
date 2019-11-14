@@ -28,12 +28,12 @@ void Fibo::norm()
     }
 
     // Usuwanie nadmiarowych zer na początku.
-    auto largestDigit = this->v.begin();
-    for (auto iter = this->v.begin(); iter != this->v.end(); ++iter)
+    size_t i = this->v.size();
+    while (i > 0 && this->v[i - 1] == false)
     {
-        if (*iter == true) largestDigit = iter;
+        this->v.pop_back();
+        --i;
     }
-    this->v.erase(++largestDigit, this->v.end());
 }
 
 const vector<bool> & Fibo::value() const
@@ -56,15 +56,15 @@ Fibo::Fibo(const string &val)
     cout<<" "<<val<<endl; */
 }
 
-Fibo::Fibo(int n)
+Fibo::Fibo(unsigned long n)
 {
     this->v= vector<bool>();
     // Pusty vector jak zero.
     if(n>0)
     {
         // Kolejne dwie liczby fibonacciego.
-        int f1=0;
-        int f2=1;
+        unsigned long f1=0;
+        unsigned long f2=1;
         // Liczba zawiera co najmniej jeden bit zapalony.
         this->v.push_back(false);
         //Szukamy najwiekszej liczby fibonacciego niewiekszej od n.
@@ -228,9 +228,9 @@ const Fibo Fibo::operator^(const Fibo &rhs)  const
     return Fibo(*this)^=rhs;
 }
 
-Fibo & Fibo::operator<<=(const int n)
+Fibo & Fibo::operator<<=(const unsigned n)
 {
-    for(int i=0;i<n;++i)this->v.push_back(false);
+    for(unsigned i=0;i<n;++i)this->v.push_back(false);
     for(size_t i=this->length()-static_cast<unsigned>(n);i>0;--i)
     {
         this->v[i+static_cast<unsigned>(n)-1]=this->v[i-1];
@@ -239,7 +239,7 @@ Fibo & Fibo::operator<<=(const int n)
     return *this;
 }
 
-const Fibo Fibo::operator<<(const int n) const
+const Fibo Fibo::operator<<(const unsigned n) const
 {
     return Fibo(*this)<<=n;
 }

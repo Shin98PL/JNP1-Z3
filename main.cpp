@@ -1,4 +1,8 @@
 #include <iostream>
+#include <cassert>
+#include <chrono>
+#include <random>
+#include "fibo.h"
 
 using namespace std;
 
@@ -7,7 +11,6 @@ int main() {
 
     assert(f == Zero());
     assert(Fibo(f) == Zero());
-    assert(Zero() < One());
     assert(Fibo("11") == Fibo("100"));
     assert((Fibo("1001") + Fibo("10")) == Fibo("1011"));
     assert((Fibo("1001") & Fibo("1100")) == Zero()); // 1100 == 10000
@@ -30,5 +33,19 @@ int main() {
     assert(Fibo("11").length() == 3); // 11 == 100
 
     std::cout << Fibo("11") << std::endl; // prints 100
-}
+    assert(Zero() < One());
 
+    unsigned seed {static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count())};
+    std::default_random_engine rng(seed);
+    for (int i = 0; i < 100; ++i)
+    {
+        unsigned long l = rng();
+        unsigned long k = rng();
+        if (Fibo(l + k) != Fibo(l) + Fibo(k))
+        {
+        std::cout << "l : " << l << " k : " << k << " l + k " << l + k << '\n';
+        std::cout << Fibo(l + k) << std::endl;
+        std::cout << Fibo(l) + Fibo(k) << std::endl;
+        }
+    }
+}
