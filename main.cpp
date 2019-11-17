@@ -9,6 +9,8 @@ using namespace std;
 int main() {
     Fibo f;
 
+
+
     assert(f == Zero());
     assert(Fibo(f) == Zero());
     assert(Fibo("11") == Fibo("100"));
@@ -39,18 +41,42 @@ int main() {
     std::default_random_engine rng(seed);
     int counter = 0;
 
-    for (int i = 0; i < 10000; ++i)
+    int liczba_sumowan = 10000;
+
+    for (int i = 0; i < liczba_sumowan; ++i)
     {
         unsigned long l = rng();
         unsigned long k = rng();
-        if (Fibo(l + k) != Fibo(l) + Fibo(k))
+        Fibo fl(l);
+        Fibo fk(k);
+        Fibo fkl(k + l);
+        if (fkl != fl + fk)
         {
-            std::cout << "l : " << l << " k : " << k << " l + k " << l + k << '\n';
+            std::cout << "l     : " << l << '\n' << fl << '\n'
+                      << "k     : " << k << '\n' << fk << '\n'
+                      << "l + k : " << l + k << '\n' << fkl << '\n' << '\n';
             std::cout << (Fibo(l + k) ^ (Fibo(l) + Fibo(k))) << std::endl;
-            std::cout << Fibo(l + k) << std::endl;
-            std::cout << Fibo(l) + Fibo(k - 1) << std::endl;
+            std::cout << Fibo(l + k)<< std::endl;
+            std::cout << Fibo(l) + Fibo(k) << std::endl << '\n';
             ++counter;
         }
     }
-    std::cout << counter << std::endl;
+
+    std::cout << "Zle sumowania : " << counter << " z " << liczba_sumowan << std::endl;
+
+    Fibo fib{};
+    std::cout << fib << '\n';
+    fib += 2;
+    std::cout << fib << '\n';
+    Fibo fib2{10};
+    fib = fib2 + 10;
+    std::cout << fib << '\n';
+//    fib = 10 + fib2;
+    std::cout << fib << '\n';
+    fib = 3;
+    std::cout << fib << '\n';
+//    std::cout << (2 < fib) << '\n';
+    std::cout << (fib > 2) << '\n';
+
+
 }

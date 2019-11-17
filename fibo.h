@@ -16,7 +16,7 @@ class Fibo
         // Konstruktory
         Fibo();
         Fibo(const std::string &S);
-        Fibo(unsigned long long n);
+        Fibo(const unsigned long long n);
         Fibo(const Fibo &F);
 
         //Destruktor
@@ -28,13 +28,13 @@ class Fibo
         Fibo & operator&=(const Fibo &rhs);
         Fibo & operator|=(const Fibo &rhs);
         Fibo & operator^=(const Fibo &rhs);
-        Fibo & operator<<=(const unsigned n);
+        Fibo & operator<<=(const unsigned long n);
 
         const Fibo operator+(const Fibo &rhs) const;
         const Fibo operator&(const Fibo &rhs) const;
         const Fibo operator|(const Fibo &rhs) const;
         const Fibo operator^(const Fibo &rhs) const;
-        const Fibo operator<<(const unsigned n) const;
+        const Fibo operator<<(const unsigned long n) const;
 
         // Porownania
         bool  operator==(const Fibo &rhs) const;
@@ -55,4 +55,3 @@ const Fibo& Zero();
 const Fibo& One();
 
 #endif // FIBO_H
-
