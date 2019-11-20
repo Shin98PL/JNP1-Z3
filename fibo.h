@@ -10,17 +10,12 @@ class Fibo
     private:
         std::vector<bool> v{};
         void norm();
-    protected:
-        const std::vector<bool> & value() const;
     public:
         // Konstruktory
         Fibo();
         Fibo(const std::string &S);
         Fibo(const unsigned long long n);
         Fibo(const Fibo &F);
-
-        //Destruktor
-        //~Fibo();
 
         //Operatory
         Fibo & operator=(const Fibo &rhs);
@@ -47,7 +42,7 @@ class Fibo
         // Strumien
         friend std::ostream& operator<<(std::ostream& os, const Fibo& f1);
 
-        //Dlugosc
+        // Dlugosc
         size_t length() const;
 };
 
