@@ -14,10 +14,17 @@ class Fibo
         // Konstruktory
         Fibo();
         Fibo(const std::string &S);
-        Fibo(const unsigned long long n);
         Fibo(const Fibo &F);
 
-        //Operatory
+        template<typename number,
+            typename = typename std::enable_if<
+            std::is_integral<number>::value
+            && !std::is_same<char, number>::value
+            && !std::is_same<bool, number>::value>::type>
+        Fibo(number n);
+
+
+        // Operatory
         Fibo & operator=(const Fibo &rhs);
         Fibo & operator+=(const Fibo &rhs);
         Fibo & operator&=(const Fibo &rhs);
@@ -25,7 +32,6 @@ class Fibo
         Fibo & operator^=(const Fibo &rhs);
         Fibo & operator<<=(const unsigned long n);
 
-        const Fibo operator+(const Fibo &rhs) const;
         const Fibo operator&(const Fibo &rhs) const;
         const Fibo operator|(const Fibo &rhs) const;
         const Fibo operator^(const Fibo &rhs) const;
@@ -45,6 +51,8 @@ class Fibo
         // Dlugosc
         size_t length() const;
 };
+
+const Fibo operator+(const Fibo &lhs, const Fibo &rhs);
 
 const Fibo& Zero();
 const Fibo& One();

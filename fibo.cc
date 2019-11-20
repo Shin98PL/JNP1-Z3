@@ -49,15 +49,21 @@ Fibo::Fibo(const string &val)
     this->norm();
 }
 
-Fibo::Fibo(unsigned long long n)
+
+template<typename number,
+    typename = typename std::enable_if<
+    std::is_integral<number>::value
+    && !std::is_same<char, number>::value
+    && !std::is_same<bool, number>::value>::type>
+Fibo::Fibo(number n)
 {
     this->v = vector<bool>();
     // Pusty vector jak zero.
     if(n > 0)
     {
         // Kolejne dwie liczby fibonacciego.
-        unsigned long long f1 = 0;
-        unsigned long long f2 = 1;
+        number f1 = 0;
+        number f2 = 1;
         // Liczba zawiera co najmniej jeden bit zapalony.
         this->v.push_back(false);
         // Szukamy najwiekszej liczby fibonacciego niewiekszej od n.
@@ -172,9 +178,9 @@ Fibo & Fibo::operator+=(const Fibo &rhs)
     return *this;
 }
 
-const Fibo Fibo::operator+(const Fibo &rhs) const
+const Fibo operator+(const Fibo &lhs, const Fibo &rhs)
 {
-    return Fibo(*this) += rhs;
+    return Fibo(lhs) += rhs;
 }
 
 Fibo & Fibo::operator&=(const Fibo &rhs)
