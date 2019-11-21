@@ -89,6 +89,7 @@ class Fibo
                 this->v[i + static_cast<size_t>(n) - 1] = this->v[i - 1];
                 this->v[i - 1] = false;
             }
+            this->norm();
             return *this;
         }
 
@@ -117,6 +118,7 @@ const Fibo operator&(const Fibo &lhs, const Fibo &rhs);
 const Fibo operator|(const Fibo &lhs, const Fibo &rhs);
 const Fibo operator^(const Fibo &lhs, const Fibo &rhs);
 
+//Porównania
 bool  operator==(const Fibo &lhs, const Fibo &rhs);
 bool  operator!=(const Fibo &lhs, const Fibo &rhs);
 bool  operator<(const Fibo &lhs, const Fibo &rhs);

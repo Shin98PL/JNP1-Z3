@@ -7,6 +7,10 @@
 #include <cassert>
 using namespace std;
 
+/* ************ */
+/* Normalizacja */
+/* ************ */
+
 void Fibo::norm()
 {
     if (this->v.size() == 0) return;
@@ -40,13 +44,18 @@ void Fibo::norm()
     }
 }
 
+/* ************ */
+/* Konstruktory */
+/* ************ */
+
 Fibo::Fibo()
 {
 }
 
 Fibo::Fibo(const string &val)
 {
-    if (val.empty() || val == "0") return;
+    assert(!val.empty());
+    if (val == "0") return;
     assert(val.front() != '0');
     bool proper = true;
     for (size_t i = 0; i < val.size() && proper; ++i)
@@ -72,6 +81,10 @@ const vector<bool> & Fibo::getV() const
     return this->v;
 }
 
+/* ********************** */
+/* Operatory arytmetyczne */
+/* ********************** */
+
 Fibo & Fibo::operator=(const Fibo &rhs)
 {
     if (this != &rhs) this->v = rhs.v;
@@ -82,7 +95,7 @@ Fibo & Fibo::operator+=(const Fibo &rhs)
 {
     // Bezpieczny margines z false przy dodawaniu.
     size_t overtake = 0;
-    if (rhs.length() > this->length()) overtake = rhs.length() - this->length();
+    if (rhs.v.size() > this->v.size()) overtake = rhs.v.size() - this->v.size();
     for (size_t i = 0; i < overtake + 5; ++i) this->v.push_back(false);
 
     // Dodajemy od najmniej znaczących fibitów do najbardziej znaczących.
@@ -162,11 +175,13 @@ const Fibo operator+(const Fibo &lhs, const Fibo &rhs)
 
 Fibo & Fibo::operator&=(const Fibo &rhs)
 {
+    //And dla każdego fibitu
     for (size_t i = 0; i < this->v.size(); ++i)
     {
         if (i < rhs.v.size()) this->v[i] = this->v[i] & rhs.v[i];
         else  this->v[i] = false;
     }
+    //Normalizacja
     this->norm();
     return *this;
 }
@@ -178,10 +193,13 @@ const Fibo operator&(const Fibo &lhs, const Fibo &rhs)
 
 Fibo & Fibo::operator|=(const Fibo &rhs)
 {
+    //Rozszerzamy o możliwe potrzebne fibity
     while (this->v.size() < rhs.v.size()) this->v.push_back(false);
+    //Or dla każdego fibitu
     for (size_t i = 0; i < rhs.v.size(); ++i) {
         this->v[i] = this->v[i] | rhs.v[i];
     }
+    //Normalizacja
     this->norm();
     return *this;
 }
@@ -193,10 +211,13 @@ const Fibo operator|(const Fibo &lhs, const Fibo &rhs)
 
 Fibo & Fibo::operator^=(const Fibo &rhs)
 {
+    //Rozszerzamy o możliwe potrzebne fibity
     while(this->v.size() < rhs.v.size()) this->v.push_back(false);
+    //Xor dla każdego fibitu
     for (size_t i = 0; i < rhs.v.size(); ++i) {
         this->v[i] = this->v[i] ^ rhs.v[i];
     }
+    //Normalizacja
     this->norm();
     return *this;
 }
@@ -206,26 +227,35 @@ const Fibo operator^(const Fibo &lhs, const Fibo &rhs)
     return Fibo(lhs) ^= rhs;
 }
 
+/* ******************** */
+/* Operatory porównania */
+/* ******************** */
+
 bool operator==(const Fibo &lhs, const Fibo &rhs)
 {
-    if (lhs.length() != rhs.length()) return false;
+    //Porownanie dlugosci
     const vector<bool> lv = lhs.getV();
     const vector<bool> rv = rhs.getV();
+    if (lv.size() != rv.size()) return false;
+    //Porownanie fibitow
     for (size_t i = 0; i < rv.size(); ++i) if (lv[i] != rv[i]) return false;
     return true;
 }
 
 bool operator!=(const Fibo &lhs, const Fibo &rhs)
 {
+    //Negacja równości
     return !(lhs == rhs);
 }
 
 bool operator<(const Fibo &lhs, const Fibo &rhs)
 {
-    if (lhs.length() < rhs.length()) return true;
-    if (lhs.length() > rhs.length()) return false;
+    //Porownanie dlugosci
     const vector<bool> lv=lhs.getV();
     const vector<bool> rv=rhs.getV();
+    if (lv.size() < rv.size()) return true;
+    if (lv.size() > rv.size()) return false;
+    //Porownanie fibitow
     for (size_t i = rv.size(); i > 0; --i)
     {
         if (lv[i - 1] < rv[i - 1]) return true;
@@ -236,25 +266,28 @@ bool operator<(const Fibo &lhs, const Fibo &rhs)
 
 bool operator>(const Fibo &lhs, const Fibo &rhs)
 {
+    //Odwrocenie zmiennych
     return rhs < lhs;
 }
 
 bool operator<=(const Fibo &lhs, const Fibo &rhs)
 {
+    //Jezeli lhs nie wieksze to true
     return !(lhs > rhs);
 }
 
 
 bool operator>=(const Fibo &lhs, const Fibo &rhs)
 {
+    //Jezeli lhs nie mniejsze to true
     return !(lhs < rhs);
 }
 
 ostream& operator<<(ostream& os, const Fibo& f1)
 {
     string tmp;
-    if(f1.length() == 0) tmp = "0";
-    for (size_t i = f1.length(); i > 0; --i)
+    if(f1.v.size() == 0) tmp = "0";
+    else for (size_t i = f1.length(); i > 0; --i)
     {
         if (f1.v[i - 1] == true) tmp.push_back('1');
         else tmp.push_back('0');
@@ -265,6 +298,7 @@ ostream& operator<<(ostream& os, const Fibo& f1)
 
 size_t Fibo::length() const
 {
+    if(this->v.size()==0)return 1;
     return this->v.size();
 }
 
