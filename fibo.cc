@@ -206,23 +206,6 @@ const Fibo operator^(const Fibo &lhs, const Fibo &rhs)
     return Fibo(lhs) ^= rhs;
 }
 
-
-Fibo & Fibo::operator<<=(const unsigned long n)
-{
-    for (unsigned long i = 0; i < n; ++i) this->v.push_back(false);
-    for (size_t i = this->length() - n; i > 0; --i)
-    {
-        this->v[i + n - 1] = this->v[i - 1];
-        this->v[i - 1] = false;
-    }
-    return *this;
-}
-
-const Fibo operator<<(const Fibo &lhs, const unsigned long n)
-{
-    return Fibo(lhs) <<= n;
-}
-
 bool operator==(const Fibo &lhs, const Fibo &rhs)
 {
     if (lhs.length() != rhs.length()) return false;

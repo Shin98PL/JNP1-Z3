@@ -74,7 +74,34 @@ class Fibo
         Fibo & operator&=(const Fibo &rhs);
         Fibo & operator|=(const Fibo &rhs);
         Fibo & operator^=(const Fibo &rhs);
-        Fibo & operator<<=(const unsigned long n);
+
+        template<typename number,
+            typename = typename std::enable_if<
+            std::is_integral<number>::value
+            && !std::is_same<char, number>::value
+            && !std::is_same<bool, number>::value>::type>
+        Fibo & operator<<=(number n)
+        {
+            assert(n >= 0);
+            for (number i = 0; i < n; ++i) this->v.push_back(false);
+            for (size_t i = this->length() - static_cast<size_t>(n); i > 0; --i)
+            {
+                this->v[i + static_cast<size_t>(n) - 1] = this->v[i - 1];
+                this->v[i - 1] = false;
+            }
+            return *this;
+        }
+
+        // Operator przesunięcia.
+        template<typename number,
+            typename = typename std::enable_if<
+            std::is_integral<number>::value
+            && !std::is_same<char, number>::value
+            && !std::is_same<bool, number>::value>::type>
+        const Fibo operator<<(number n) const
+        {
+            return Fibo(*this) <<= n;
+        }
 
 
         // Wypisywanie na strumień.
@@ -89,7 +116,6 @@ const Fibo operator+(const Fibo &lhs, const Fibo &rhs);
 const Fibo operator&(const Fibo &lhs, const Fibo &rhs);
 const Fibo operator|(const Fibo &lhs, const Fibo &rhs);
 const Fibo operator^(const Fibo &lhs, const Fibo &rhs);
-const Fibo operator<<(const Fibo &lhs, const unsigned long n);
 
 bool  operator==(const Fibo &lhs, const Fibo &rhs);
 bool  operator!=(const Fibo &lhs, const Fibo &rhs);
