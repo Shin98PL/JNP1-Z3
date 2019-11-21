@@ -16,13 +16,9 @@ class Fibo
         Fibo(const std::string &S);
         Fibo(const Fibo &F);
 
-        template<typename number,
-            typename = typename std::enable_if<
-            std::is_integral<number>::value
-            && !std::is_same<char, number>::value
-            && !std::is_same<bool, number>::value>::type>
-        Fibo(number n);
+        Fibo(unsigned long long n);
 
+        const std::vector<bool> & getV() const;
 
         // Operatory
         Fibo & operator=(const Fibo &rhs);
@@ -32,18 +28,6 @@ class Fibo
         Fibo & operator^=(const Fibo &rhs);
         Fibo & operator<<=(const unsigned long n);
 
-        const Fibo operator&(const Fibo &rhs) const;
-        const Fibo operator|(const Fibo &rhs) const;
-        const Fibo operator^(const Fibo &rhs) const;
-        const Fibo operator<<(const unsigned long n) const;
-
-        // Porownania
-        bool  operator==(const Fibo &rhs) const;
-        bool  operator!=(const Fibo &rhs) const;
-        bool  operator<(const Fibo &rhs) const;
-        bool  operator>(const Fibo &rhs) const;
-        bool  operator<=(const Fibo &rhs) const;
-        bool  operator>=(const Fibo &rhs) const;
 
         // Strumien
         friend std::ostream& operator<<(std::ostream& os, const Fibo& f1);
@@ -53,6 +37,18 @@ class Fibo
 };
 
 const Fibo operator+(const Fibo &lhs, const Fibo &rhs);
+const Fibo operator&(const Fibo &lhs, const Fibo &rhs);
+const Fibo operator|(const Fibo &lhs, const Fibo &rhs);
+const Fibo operator^(const Fibo &lhs, const Fibo &rhs);
+const Fibo operator<<(const Fibo &lhs, const unsigned long n);
+
+// Porownania
+bool  operator==(const Fibo &lhs, const Fibo &rhs);
+bool  operator!=(const Fibo &lhs, const Fibo &rhs);
+bool  operator<(const Fibo &lhs, const Fibo &rhs);
+bool  operator>(const Fibo &lhs, const Fibo &rhs);
+bool  operator<=(const Fibo &lhs, const Fibo &rhs);
+bool  operator>=(const Fibo &lhs, const Fibo &rhs);
 
 const Fibo& Zero();
 const Fibo& One();

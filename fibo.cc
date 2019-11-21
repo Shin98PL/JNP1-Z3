@@ -1,5 +1,6 @@
 #include "fibo.h"
-#include<vector>
+#include <vector>
+#include <cassert>
 using namespace std;
 
 void Fibo::norm()
@@ -42,6 +43,14 @@ Fibo::Fibo()
 
 Fibo::Fibo(const string &val)
 {
+    if (val.empty() || val == "0") return;
+    assert(val.back() != '0');
+    bool proper = true;
+    for (size_t i = 0; i < val.size() && proper; ++i)
+    {
+        if (val[i] != '0' && val[i] != '1') proper = false;
+    }
+    assert(proper);
     this->v = vector<bool>(val.size(), false);
     for(size_t i = 0; i < val.size(); ++i)
         if(val[val.size() - i - 1] == '1') v[i] = true;
@@ -50,20 +59,15 @@ Fibo::Fibo(const string &val)
 }
 
 
-template<typename number,
-    typename = typename std::enable_if<
-    std::is_integral<number>::value
-    && !std::is_same<char, number>::value
-    && !std::is_same<bool, number>::value>::type>
-Fibo::Fibo(number n)
+Fibo::Fibo(unsigned long long n)
 {
     this->v = vector<bool>();
     // Pusty vector jak zero.
     if(n > 0)
     {
         // Kolejne dwie liczby fibonacciego.
-        number f1 = 0;
-        number f2 = 1;
+        unsigned long long f1 = 0;
+        unsigned long long f2 = 1;
         // Liczba zawiera co najmniej jeden bit zapalony.
         this->v.push_back(false);
         // Szukamy najwiekszej liczby fibonacciego niewiekszej od n.
@@ -93,6 +97,11 @@ Fibo::Fibo(number n)
 Fibo::Fibo(const Fibo & F)
 {
     this->v = F.v;
+}
+
+const vector<bool> & Fibo::getV() const
+{
+    return this->v;
 }
 
 Fibo & Fibo::operator=(const Fibo &rhs)
@@ -194,9 +203,9 @@ Fibo & Fibo::operator&=(const Fibo &rhs)
     return *this;
 }
 
-const Fibo Fibo::operator&(const Fibo &rhs) const
+const Fibo operator&(const Fibo &lhs, const Fibo &rhs)
 {
-    return Fibo(*this)&=rhs;
+    return Fibo(lhs)&=rhs;
 }
 
 Fibo & Fibo::operator|=(const Fibo &rhs)
@@ -207,9 +216,9 @@ Fibo & Fibo::operator|=(const Fibo &rhs)
     return *this;
 }
 
-const Fibo Fibo::operator|(const Fibo &rhs)  const
+const Fibo operator|(const Fibo &lhs, const Fibo &rhs)
 {
-    return Fibo(*this)|=rhs;
+    return Fibo(lhs)|=rhs;
 }
 
 Fibo & Fibo::operator^=(const Fibo &rhs)
@@ -220,9 +229,9 @@ Fibo & Fibo::operator^=(const Fibo &rhs)
     return *this;
 }
 
-const Fibo Fibo::operator^(const Fibo &rhs)  const
+const Fibo operator^(const Fibo &lhs, const Fibo &rhs)
 {
-    return Fibo(*this)^=rhs;
+    return Fibo(lhs)^=rhs;
 }
 
 
@@ -237,48 +246,53 @@ Fibo & Fibo::operator<<=(const unsigned long n)
     return *this;
 }
 
-const Fibo Fibo::operator<<(const unsigned long n) const
+const Fibo operator<<(const Fibo &lhs, const unsigned long n)
 {
-    return Fibo(*this)<<=n;
+    return Fibo(lhs)<<=n;
 }
 
-bool  Fibo::operator==(const Fibo &rhs) const
+bool operator==(const Fibo &lhs, const Fibo &rhs)
 {
-    if (this->length() != rhs.v.size()) return false;
-    for (size_t i = 0; i < rhs.v.size(); ++i) if (this->v[i] != v[i]) return false;
+    if (lhs.length() != rhs.length()) return false;
+    const vector<bool> lv=lhs.getV();
+    const vector<bool> rv=rhs.getV();
+    for (size_t i = 0; i < rv.size(); ++i) if (lv[i] != rv[i]) return false;
     return true;
 }
 
-bool  Fibo::operator!=(const Fibo &rhs) const
+bool operator!=(const Fibo &lhs, const Fibo &rhs)
 {
-    return !(*this == rhs);
+    return !(lhs == rhs);
 }
 
-bool  Fibo::operator<(const Fibo &rhs) const
+bool operator<(const Fibo &lhs, const Fibo &rhs)
 {
-    if (this->length() < rhs.v.size()) return true;
-    if (this->length() > rhs.v.size()) return false;
-    for (size_t i = rhs.v.size(); i > 0; --i)
+    if (lhs.length() < rhs.length()) return true;
+    if (lhs.length() > rhs.length()) return false;
+    const vector<bool> lv=lhs.getV();
+    const vector<bool> rv=rhs.getV();
+    for (size_t i = rv.size(); i > 0; --i)
     {
-        if (this->v[i - 1] < rhs.v[i - 1]) return true;
-        if (this->v[i - 1] > rhs.v[i - 1]) return false;
+        if (lv[i - 1] < rv[i - 1]) return true;
+        if (lv[i - 1] > rv[i - 1]) return false;
     }
     return false;
 }
 
-bool  Fibo::operator<=(const Fibo &rhs) const
+bool operator>(const Fibo &lhs, const Fibo &rhs)
 {
-    return *this < rhs || *this == rhs;
+    return rhs < lhs;
 }
 
-bool  Fibo::operator>(const Fibo &rhs) const
+bool operator<=(const Fibo &lhs, const Fibo &rhs)
 {
-    return !(*this <= rhs);
+    return !(lhs > rhs);
 }
 
-bool  Fibo::operator>=(const Fibo &rhs) const
+
+bool operator>=(const Fibo &lhs, const Fibo &rhs)
 {
-    return !(*this < rhs);
+    return !(lhs < rhs);
 }
 
 ostream& operator<<(ostream& os, const Fibo& f1)
