@@ -1,3 +1,7 @@
+/* Trzecie zadanie z Języków i narzędzi programowania I 19/20
+ * 2019-11-21
+ * Damian Chańko i Andrzej Małek
+ */
 #include "fibo.h"
 #include <vector>
 #include <cassert>
@@ -38,13 +42,12 @@ void Fibo::norm()
 
 Fibo::Fibo()
 {
-    this->v = vector<bool>();
 }
 
 Fibo::Fibo(const string &val)
 {
     if (val.empty() || val == "0") return;
-    assert(val.back() != '0');
+    assert(val.front() != '0');
     bool proper = true;
     for (size_t i = 0; i < val.size() && proper; ++i)
     {
@@ -58,41 +61,6 @@ Fibo::Fibo(const string &val)
     this->norm();
 }
 
-
-Fibo::Fibo(unsigned long long n)
-{
-    this->v = vector<bool>();
-    // Pusty vector jak zero.
-    if(n > 0)
-    {
-        // Kolejne dwie liczby fibonacciego.
-        unsigned long long f1 = 0;
-        unsigned long long f2 = 1;
-        // Liczba zawiera co najmniej jeden bit zapalony.
-        this->v.push_back(false);
-        // Szukamy najwiekszej liczby fibonacciego niewiekszej od n.
-        while(n - f2 > f1)
-        {
-            this->v.push_back(false);
-            swap(f1, f2);
-            if(f1 != 1) f2 += f1;
-            else f2=2;
-        }
-        // Podzial liczby n na liczby fibonacciego.
-        for(size_t i = this->v.size(); i > 0; --i)
-        {
-            if(n >= f2)
-            {
-                this->v[i - 1] = true;
-                n -= f2;
-            }
-            f2 -= f1;
-            swap(f1, f2);
-        }
-        // Normalizacja.
-        this->norm();
-    }
-}
 
 Fibo::Fibo(const Fibo & F)
 {
@@ -196,7 +164,7 @@ Fibo & Fibo::operator&=(const Fibo &rhs)
 {
     for (size_t i = 0; i < this->v.size(); ++i)
     {
-        if (i < rhs.v.size()) this->v[i] = this->v[i]&rhs.v[i];
+        if (i < rhs.v.size()) this->v[i] = this->v[i] & rhs.v[i];
         else  this->v[i] = false;
     }
     this->norm();
@@ -205,33 +173,37 @@ Fibo & Fibo::operator&=(const Fibo &rhs)
 
 const Fibo operator&(const Fibo &lhs, const Fibo &rhs)
 {
-    return Fibo(lhs)&=rhs;
+    return Fibo(lhs) &= rhs;
 }
 
 Fibo & Fibo::operator|=(const Fibo &rhs)
 {
     while (this->v.size() < rhs.v.size()) this->v.push_back(false);
-    for (size_t i = 0; i < rhs.v.size(); i++) this->v[i] = this->v[i] | rhs.v[i];
+    for (size_t i = 0; i < rhs.v.size(); ++i) {
+        this->v[i] = this->v[i] | rhs.v[i];
+    }
     this->norm();
     return *this;
 }
 
 const Fibo operator|(const Fibo &lhs, const Fibo &rhs)
 {
-    return Fibo(lhs)|=rhs;
+    return Fibo(lhs) |= rhs;
 }
 
 Fibo & Fibo::operator^=(const Fibo &rhs)
 {
     while(this->v.size() < rhs.v.size()) this->v.push_back(false);
-    for (size_t i = 0; i < rhs.v.size(); i++) this->v[i] = this->v[i] ^ rhs.v[i];
+    for (size_t i = 0; i < rhs.v.size(); ++i) {
+        this->v[i] = this->v[i] ^ rhs.v[i];
+    }
     this->norm();
     return *this;
 }
 
 const Fibo operator^(const Fibo &lhs, const Fibo &rhs)
 {
-    return Fibo(lhs)^=rhs;
+    return Fibo(lhs) ^= rhs;
 }
 
 
@@ -248,14 +220,14 @@ Fibo & Fibo::operator<<=(const unsigned long n)
 
 const Fibo operator<<(const Fibo &lhs, const unsigned long n)
 {
-    return Fibo(lhs)<<=n;
+    return Fibo(lhs) <<= n;
 }
 
 bool operator==(const Fibo &lhs, const Fibo &rhs)
 {
     if (lhs.length() != rhs.length()) return false;
-    const vector<bool> lv=lhs.getV();
-    const vector<bool> rv=rhs.getV();
+    const vector<bool> lv = lhs.getV();
+    const vector<bool> rv = rhs.getV();
     for (size_t i = 0; i < rv.size(); ++i) if (lv[i] != rv[i]) return false;
     return true;
 }
